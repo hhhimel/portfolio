@@ -18,6 +18,24 @@
     "body": "<p>This is a demo post showing the two new fields your posts can use: <strong>video</strong> (plays right under the cover image) and <strong>gallery</strong> (a strip of extra photos under the write-up).</p>\n<p>Use it as a template — copy this file, rename it, swap the frontmatter and text, and delete the fields you don&#39;t need (both <code>video</code> and <code>gallery</code> are optional; most posts will just use <code>cover</code>).</p>\n"
   },
   {
+    "id": "2026-09-27-test",
+    "featured": false,
+    "category": "field",
+    "tag": "Fieldwork",
+    "date": "2026-09-26",
+    "minutes": 1,
+    "title": "From lab to field: a video walkthrough",
+    "summary": "A short video tour of a day's work, from the greenhouse nursery to the trial plots, with extra photos below.",
+    "cover": "images/trial-rows.jpg",
+    "video": "videos/intro.mp4",
+    "gallery": [
+      "images/nursery-pots.jpg",
+      "images/leaf-closeup.jpg",
+      "images/field-evening.jpg"
+    ],
+    "body": "<p>This is a demo post showing the two new fields your posts can use: <strong>video</strong> (plays right under the cover image) and <strong>gallery</strong> (a strip of extra photos under the write-up).</p>\n"
+  },
+  {
     "id": "2025-08-12-multi-environment-trials",
     "featured": true,
     "category": "breeding",
