@@ -131,6 +131,9 @@ The two things that actually move ranking from here, both outside what I can do 
 1. **Submit to Google Search Console** (search.google.com/search-console) and Bing Webmaster Tools once your domain is live — add the property, verify ownership, submit `sitemap.xml`. Without this, Google may take weeks/months to even discover the site.
 2. **Backlinks from higher-authority sites** — this is the single biggest ranking factor. Add your portfolio link to: LinkedIn profile ("Website" field), ResearchGate/ORCID/Google Scholar profile, GitHub profile bio, and your Research Square preprint's author info. Each one is a credibility signal search engines weigh heavily — and none of them can be faked from inside the code.
 
+### Updates (v13.16 — comments live)
+- Giscus is configured for `hhhimel/portfolio`, category **General**. Each note gets its own thread (mapping by post id, not page path, since notes open inside one page). Comment box sits at the bottom of the thread.
+
 ### Updates (v13.15 — light-mode borders)
 - Light theme borders (`--border`, `--border-strong`, `--glass-border`) are darker/greener so cards, nav, menu and form fields have clear outlines. Dark theme untouched.
 - Hero: **View experience** has no arrow; **Read notes** has a downward arrow.

@@ -466,13 +466,13 @@
   });
 
   /* ---- real comments, via Giscus (GitHub Discussions — free) ----
-     Fill in your own repo/category IDs below (from https://giscus.app
+     Configured for hhhimel/portfolio (category "General"); edit the IDs below if you change repo (from https://giscus.app
      after enabling Discussions on your repo), or comments stay hidden. */
   const GISCUS = {
-    repo: "YOUR_GH_USERNAME/YOUR_REPO",
-    repoId: "YOUR_REPO_ID",
-    category: "Comments",
-    categoryId: "YOUR_CATEGORY_ID",
+    repo: "hhhimel/portfolio",
+    repoId: "R_kgDOUqoRpg",
+    category: "General",
+    categoryId: "DIC_kwDOUqoRps4DGj4b",
   };
   function loadGiscusComments(postId) {
     const box = document.getElementById("giscus-container");
@@ -493,7 +493,7 @@
     script.setAttribute("data-mapping", "specific");
     script.setAttribute("data-term", postId);
     script.setAttribute("data-reactions-enabled", "1");
-    script.setAttribute("data-input-position", "top");
+    script.setAttribute("data-input-position", "bottom");
     script.setAttribute("data-theme", document.documentElement.classList.contains("dark") ? "dark_dimmed" : "light");
     script.setAttribute("data-lang", "en");
     box.appendChild(script);
