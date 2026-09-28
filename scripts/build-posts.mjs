@@ -17,8 +17,8 @@ const POSTS_DIR = path.join(ROOT, "posts");
 const OUT_JSON = path.join(ROOT, "data", "posts.json");
 const OUT_BLOG_DIR = path.join(ROOT, "blog");
 const SITE_NAME = "Md. Habib Hasan Himel";
-// TODO: replace with your real deployed domain (see README).
-const SITE_URL = "https://hhhimel.github.io";
+// Live site address (Cloudflare Pages, synced from this GitHub repo).
+const SITE_URL = "https://hhhimel.pages.dev";
 
 function readPosts() {
   if (!fs.existsSync(POSTS_DIR)) return [];
@@ -66,7 +66,7 @@ function esc(v) {
  *  reading page with a link back into the full portfolio. */
 function postPageHTML(p) {
   const url = `${SITE_URL}/blog/${p.id}/`;
-  const image = p.cover ? `${SITE_URL}/${p.cover}` : `${SITE_URL}/images/profile.jpg`;
+  const image = p.cover ? `${SITE_URL}/${p.cover}` : `${SITE_URL}/assets/images/profile.jpg`;
   return `<!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
@@ -89,7 +89,7 @@ function postPageHTML(p) {
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="../../css/style.css" />
+<link rel="stylesheet" href="../../assets/css/style.css" />
 <style>
   body{max-width:720px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
   .post-cover img{width:100%;border-radius:14px;margin:1.25rem 0}

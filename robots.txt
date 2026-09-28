@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
 
-Sitemap: https://hhhimel.github.io/sitemap.xml
+Sitemap: https://hhhimel.pages.dev/sitemap.xml

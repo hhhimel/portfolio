@@ -2,46 +2,32 @@
 
 Static site for Cloudflare Pages.
 
-## How to publish a new post (v4 — Markdown, no more hand-editing JSON)
+## How to publish a new post
 
-1. Create a new file in **`posts/`**, e.g. `posts/2026-10-02-blackgram-flowering.md`.
-   The filename becomes the post's URL, so use lowercase letters, numbers and hyphens only.
-2. Add frontmatter + your write-up in Markdown:
+### Easiest (recommended): form writer — no hand Markdown/JSON
 
-   ```md
-   ---
-   title: "Your post title"
-   date: "2026-10-02"
-   category: "field"        # breeding | field | methods (used by the blog filter buttons)
-   summary: "One or two sentences shown on the card and used for link previews."
-   cover: "images/your-photo.jpg"
-   # optional:
-   featured: true            # only put this on ONE post — it becomes the big top card
-   video: "videos/your-clip.mp4"
-   gallery:
-     - "images/extra-1.jpg"
-     - "images/extra-2.jpg"
-   ---
+1. Open **`admin/write.html`** in your browser.
+2. Fill title, date, category, summary, body. Optional: cover, video, gallery, featured.
+3. Click **Load posts.json → add → download** and choose your current `data/posts.json`.
+4. Replace `data/posts.json` with the downloaded file.
+5. Put any new photos under `assets/images/` (paths must match the form).
+6. Upload / deploy the portfolio folder.
 
-   Write the body here in plain Markdown — `## Heading`, `- bullet`, `**bold**`,
-   blank line between paragraphs. No HTML tags needed.
-   ```
-3. Put any new photos/video under `images/` or `videos/` (same folder as always).
-4. Commit and push. A GitHub Action (`.github/workflows/build-posts.yml`) automatically
-   regenerates `data/posts.json` and a shareable page at `blog/<your-filename>/` and
-   commits them back — Cloudflare Pages then deploys as usual.
-5. To edit or delete a post later, edit or delete its `.md` file and push again.
+Also on that page: **Download .md** (for GitHub later) and **Copy JSON entry**.
 
-**You never touch `data/posts.json`, `blog/`, or any HTML by hand** — those are
-generated. See `posts/2026-09-26-lab-to-field-demo.md` for a working example that
-uses `video` and `gallery`.
+You do **not** need to write `.md` or edit JSON structure by hand for normal posts.
 
-### Testing locally before you push
+### Optional long-term: Markdown + GitHub Action
+
+If the repo Action is enabled: put a `.md` in `posts/` (or download one from the writer), push to `main`, and the Action rebuilds `data/posts.json` + `blog/`. Good for automation; not required if you use the form + folder upload.
+
+### Testing locally
 ```
 npm install
 npm run build:posts
 python -m http.server
 ```
+Open `http://localhost:8000/admin/write.html`.
 
 ### Why there's now a real page per post
 `blog/<id>/index.html` is a plain, crawlable page with correct title/description/
@@ -50,7 +36,7 @@ photo and text in the preview card, not the site's generic one. Visitors who ope
 it get a simple reading page with a link back into the full portfolio (which opens
 straight to that same post, via the `#post=<id>` deep link).
 
-**One-time setup:** replace `https://hhhimel.github.io` in `scripts/build-posts.mjs`,
+**One-time setup (already done — live address is `https://hhhimel.pages.dev`):** the address is set in `scripts/build-posts.mjs`,
 `robots.txt`, `sitemap.xml`, and the JSON-LD block in `index.html` with your actual
 deployed domain.
 
@@ -77,8 +63,8 @@ Contact icons are in the Contact section of `index.html`. Telegram defaults to `
 | Change | File |
 |--------|------|
 | New post | add a `.md` file under `posts/` (see above) |
-| Photos / video | add under `images/` or `videos/`, reference the path in the post's frontmatter |
-| CV file | replace `Himel_CV.docx` |
+| Photos / video | add under `assets/images/` or `assets/videos/`, reference the path in the post's frontmatter |
+| CV file | replace `assets/docs/Himel_CV.pdf` (and the .docx copy) |
 
 ## Comments
 
@@ -127,12 +113,12 @@ Removed everything that wasn't your work: notices bell + popup, the auto-scrolli
 1. Make sure your portfolio's GitHub repo is **public**, then enable **Discussions** for it (repo → Settings → Features → Discussions).
 2. Install the [giscus app](https://github.com/apps/giscus) on that repo.
 3. Go to **https://giscus.app**, fill in your repo, pick a "specific discussion" mapping, pick a category (e.g. create one called "Comments"), and it'll show you your `data-repo-id` and `data-category-id`.
-4. Open `js/main.js`, find the `GISCUS` object near the bottom, and fill in `repo`, `repoId`, `categoryId` (and `category` if you named it something other than "Comments").
+4. Open `assets/js/main.js`, find the `GISCUS` object near the bottom, and fill in `repo`, `repoId`, `categoryId` (and `category` if you named it something other than "Comments").
 
 Until you do that, the comment area just shows a quiet placeholder — nothing breaks.
 
 **Other additions:**
-- Proper favicon set: `favicon.ico`, `apple-touch-icon.png`, `icon-192.png`/`icon-512.png`, and `site.webmanifest` — bookmarks and "Add to Home Screen" now get a real icon instead of relying only on the inline SVG.
+- Proper favicon set: `favicon.ico`, `apple-touch-icon.png`, `assets/icons/icon-192.png`/`icon-512.png`, and `site.webmanifest` — bookmarks and "Add to Home Screen" now get a real icon instead of relying only on the inline SVG.
 - `ScholarlyArticle` structured data (JSON-LD) added for your Research Square preprint, alongside the existing Person schema.
 - **Latest note teaser** in the hero: a small pill under your location/university line that always shows your most recent post and opens it directly — updates automatically as you publish.
 
@@ -144,6 +130,49 @@ Added a `<link rel="canonical">` and a `WebSite` JSON-LD block on the homepage. 
 The two things that actually move ranking from here, both outside what I can do for you:
 1. **Submit to Google Search Console** (search.google.com/search-console) and Bing Webmaster Tools once your domain is live — add the property, verify ownership, submit `sitemap.xml`. Without this, Google may take weeks/months to even discover the site.
 2. **Backlinks from higher-authority sites** — this is the single biggest ranking factor. Add your portfolio link to: LinkedIn profile ("Website" field), ResearchGate/ORCID/Google Scholar profile, GitHub profile bio, and your Research Square preprint's author info. Each one is a credibility signal search engines weigh heavily — and none of them can be faked from inside the code.
+
+### Updates (v13.15 — light-mode borders)
+- Light theme borders (`--border`, `--border-strong`, `--glass-border`) are darker/greener so cards, nav, menu and form fields have clear outlines. Dark theme untouched.
+- Hero: **View experience** has no arrow; **Read notes** has a downward arrow.
+
+### Updates (v13.14 — hero + form polish)
+- Hero back to left-aligned. Order is now: headline → intro → one-line "Sher-e-Bangla Agricultural University · Dhaka, Bangladesh" → one row with **View experience** (colored) and **Read notes** (dimmer).
+- Contact form is more compact (smaller padding, 3-row message box) and the map is shorter (16:10 instead of 4:3).
+- Removed the `post/` redirect folder (it pointed to `/admin/`, which no longer exists). Post sources stay in `posts/`; the writing tool is `admin/write.html`.
+
+### Updates (v13.13 — one live address)
+- The portfolio is served by Cloudflare Pages (synced from this repo) at **https://hhhimel.pages.dev**, matching the link on the CV. The canonical link, social-preview images, structured data, sitemap, robots.txt, and every generated blog page now use that address. Links to your other projects stay on `hhhimel.github.io/...`.
+
+### Updates (v13.12 — layout + folder cleanup)
+- **Folder structure:** everything static now lives under `assets/` — `css/`, `js/`, `images/`, `videos/`, `docs/` (CV), `icons/`. Root keeps only what browsers/crawlers expect there (`index.html`, `favicon.ico`, `apple-touch-icon.png`, `site.webmanifest`, `robots.txt`, `sitemap.xml`). New photos go in `assets/images/`, videos in `assets/videos/`, and post frontmatter paths start with `assets/…`.
+- Hero: **View experience** and **Read notes** sit side by side; "Read notes" jumps to the Notes section. The hero intro (including Dhaka / university chips) is centered when the layout stacks on phones/tablets.
+- Menu links slightly tighter; removed a duplicated hero badge dot and more dead CSS (unused info-widget styles).
+
+### Updates (v13.11 — CV link simplified)
+- **Download CV** now just opens `Himel_CV.pdf` in a new tab (browser preview with its own download/print buttons). The dialog from v13.10 was removed. `Himel_CV.docx` stays in the repo but is no longer linked; re-export the PDF whenever the CV changes.
+
+### Updates (v13.10 — CV dialog, superseded)
+- **Download CV** (nav + mobile menu) opens a small dialog: **Print…** (shown only on devices with a real print dialog — its window has "Save as PDF"), **Save as PDF**, **Save as Word (.docx)**. Phones/tablets just show the two save options. Browsers can't print a .docx, so Word is a save-only option.
+- Hero teaser tag "Latest note" → **"Read notes"** (still opens the newest post).
+
+### Updates (v13.9 — CV menu + polish)
+- **Download CV** is now a dropdown: *View / Print / Save as PDF* (opens `Himel_CV.pdf` in the browser viewer, which has print + save built in) and *Download Word (.docx)*. Mobile menu lists both. **When you edit the CV, re-export both `Himel_CV.docx` and `Himel_CV.pdf`.**
+- "Send message" now has an arrow like "View experience" (and keeps it after a send attempt).
+- Contact icons centered; reply hint says "within 24 hours"; WhatsApp/phone removed.
+- About: name and role centered under the photo when the layout stacks (phones/tablets).
+
+### Updates (v13.5 — section IA pass)
+- Nav/section label "Activities" → **"Notes"**: it labels your blog write-ups, and "Activities" read as unrelated extracurriculars. Matches what the section itself has always been called ("Notes & Insights").
+- Contributions now visibly splits into **Publication** → **Personal Projects** → **Recognition**, instead of one flat list where a preprint and four side projects looked like the same kind of thing.
+- Each project card's badge now shows its stack (e.g. "Laravel · MySQL · jQuery") instead of repeating "Personal Project" four times — more useful, and the "Personal Projects" heading already says what they are.
+- Skills category "Additional · IT" → **"IT & Tools"**, a plainer, parallel name next to "Research & Technical" and "Agricultural Expertise".
+
+### Updates (v13 — cleanup + new project links)
+- Removed ~390 lines of dead CSS left over from the old notification bell, hero clock/calendar tiles, and the standalone clock/calendar/weather pop-up modals — none of it was referenced by any HTML or JS anymore.
+- Removed the duplicate `admin/index.html` (byte-identical to `admin/write.html`); use `admin/write.html` as the README already describes.
+- Filled in the live **CampusAssist** link and added an **AssignmentStudio** project card in Contributions.
+- Added the institutional email next to the personal one in Contact.
+- "Focus areas" in About now uses the same tag style as Skills, for consistency.
 
 ### Updates (v12 — menu redesign, app-style)
 Restyled the mobile menu (☰) to feel more like a native app sheet: real outline icons per item instead of small dots, roomier tap targets, a flatter/more opaque dark background (less "frosted", more solid) with a quicker, subtler open animation, and a plain small caption-style header. Same glass/blur system as the rest of the site, just tuned — no new dependencies.

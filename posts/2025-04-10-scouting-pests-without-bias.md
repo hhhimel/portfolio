@@ -3,7 +3,7 @@ title: "Scouting pests in experimental plots without bias"
 date: "2025-04-10"
 category: "field"
 tag: "Fieldwork"
-cover: "images/field-pest.jpg"
+cover: "assets/images/field-pest.jpg"
 summary: "How we sample larvae and damage scores so data stay comparable across replicates and seasons."
 ---
 

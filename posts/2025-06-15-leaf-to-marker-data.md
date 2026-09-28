@@ -3,7 +3,7 @@ title: "From leaf sample to marker data: a simple lab workflow"
 date: "2025-06-15"
 category: "methods"
 tag: "Methods"
-cover: "images/lab-pipette.jpg"
+cover: "assets/images/lab-pipette.jpg"
 summary: "DNA extraction, PCR setup, and common pitfalls when screening diversity panels with molecular markers."
 ---
 

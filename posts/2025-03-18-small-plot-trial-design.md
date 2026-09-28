@@ -3,7 +3,7 @@ title: "Designing small-plot trials that still yield clean data"
 date: "2025-03-18"
 category: "methods"
 tag: "Methods"
-cover: "images/plot-layout.jpg"
+cover: "assets/images/plot-layout.jpg"
 summary: "Randomisation, border rows, and simple R layouts for student and early-career breeding experiments."
 ---
 

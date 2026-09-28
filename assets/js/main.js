@@ -160,17 +160,61 @@
   }, { threshold: 0.5 });
   stats.forEach((s) => statsObserver.observe(s));
 
-  /* Contact form */
+  /* Contact form → Web3Forms (inbox delivery) */
   const form = document.getElementById("contact-form");
-  form?.addEventListener("submit", (e) => {
+  const contactStatus = document.getElementById("contact-status");
+  const contactSubmit = document.getElementById("contact-submit");
+  form?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const name = document.getElementById("name")?.value?.trim() || "";
     const email = document.getElementById("email")?.value?.trim() || "";
     const msg = document.getElementById("msg")?.value?.trim() || "";
-    if (!name || !email || !msg) return;
-    const subject = encodeURIComponent("Message from " + name);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\n${msg}`);
-    window.location.href = `mailto:hh.himel.m@gmail.com?subject=${subject}&body=${body}`;
+    if (!name || !email || !msg) {
+      if (contactStatus) {
+        contactStatus.hidden = false;
+        contactStatus.textContent = "Please fill in name, email, and message.";
+        contactStatus.className = "contact-status is-err";
+      }
+      return;
+    }
+    if (contactSubmit) {
+      contactSubmit.disabled = true;
+      contactSubmit.dataset.label = contactSubmit.innerHTML;
+      contactSubmit.textContent = "Sending…";
+    }
+    if (contactStatus) {
+      contactStatus.hidden = false;
+      contactStatus.textContent = "Sending your message…";
+      contactStatus.className = "contact-status";
+    }
+    try {
+      const data = new FormData(form);
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: data,
+        headers: { Accept: "application/json" },
+      });
+      const json = await res.json().catch(() => ({}));
+      if (res.ok && json.success) {
+        form.reset();
+        if (contactStatus) {
+          contactStatus.textContent = "Message sent. I’ll get back to you soon.";
+          contactStatus.className = "contact-status is-ok";
+        }
+      } else {
+        throw new Error(json.message || "Send failed");
+      }
+    } catch (err) {
+      if (contactStatus) {
+        contactStatus.textContent = "Could not send right now. Email me at hh.himel.m@gmail.com instead.";
+        contactStatus.className = "contact-status is-err";
+      }
+    } finally {
+      if (contactSubmit) {
+        contactSubmit.disabled = false;
+        contactSubmit.innerHTML = contactSubmit.dataset.label || "Send message";
+      }
+    }
   });
 
   function handleResize() {
@@ -388,11 +432,6 @@
     if (metaDescEl) metaDescEl.setAttribute("content", DEFAULT_DESC);
     if (push && /^#post=/.test(location.hash)) history.pushState(null, "", location.pathname + location.search);
   }
-  document.getElementById("hero-latest-note")?.addEventListener("click", (e) => {
-    e.preventDefault();
-    const id = e.currentTarget.dataset.post;
-    if (id) openPost(id);
-  });
   document.getElementById("reader-pager")?.addEventListener("click", (e) => {
     const link = e.target.closest(".reader-pager-link[data-post]");
     if (link) openPost(link.dataset.post);
@@ -484,17 +523,6 @@
       if (m) {
         const id = decodeURIComponent(m[1]);
         if (postsById[id]) openPost(id, { push: false });
-      }
-    })
-    .then(() => {
-      /* "Latest note" teaser in the hero */
-      const latest = posts[0];
-      const el = document.getElementById("hero-latest-note");
-      const titleEl = document.getElementById("hero-latest-note-title");
-      if (latest && el && titleEl) {
-        titleEl.textContent = latest.title;
-        el.dataset.post = latest.id;
-        el.hidden = false;
       }
     })
     .catch((err) => {

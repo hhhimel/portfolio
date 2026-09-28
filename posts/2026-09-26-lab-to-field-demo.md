@@ -3,12 +3,12 @@ title: "From lab to field: a video walkthrough"
 date: "2026-09-26"
 category: "field"
 tag: "Fieldwork"
-cover: "images/trial-rows.jpg"
-video: "videos/intro.mp4"
+cover: "assets/images/trial-rows.jpg"
+video: "assets/videos/intro.mp4"
 gallery:
-  - "images/nursery-pots.jpg"
-  - "images/leaf-closeup.jpg"
-  - "images/field-evening.jpg"
+  - "assets/images/nursery-pots.jpg"
+  - "assets/images/leaf-closeup.jpg"
+  - "assets/images/field-evening.jpg"
 summary: "A short video tour of a day's work, from the greenhouse nursery to the trial plots, with extra photos below."
 ---
 

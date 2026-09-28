@@ -4,7 +4,7 @@ date: "2025-08-12"
 category: "breeding"
 tag: "Breeding"
 featured: true
-cover: "images/trial-rows.jpg"
+cover: "assets/images/trial-rows.jpg"
 summary: "Genotype × environment interaction can flip rankings between seasons. Here's how we structure METs, what traits we prioritise, and how selection indices help under Bangladesh's variable climates."
 ---
 

@@ -3,7 +3,7 @@ title: "Trait associations that guide blackgram improvement"
 date: "2025-05-02"
 category: "breeding"
 tag: "Breeding"
-cover: "images/blackgram-flower.jpg"
+cover: "assets/images/blackgram-flower.jpg"
 summary: "Which agronomic and yield components tend to move together — and how that shapes crossing and selection decisions."
 ---
 

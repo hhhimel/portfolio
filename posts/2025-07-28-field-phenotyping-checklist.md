@@ -3,7 +3,7 @@ title: "Field phenotyping checklist for pulse trials"
 date: "2025-07-28"
 category: "field"
 tag: "Fieldwork"
-cover: "images/field-scoring.jpg"
+cover: "assets/images/field-scoring.jpg"
 summary: "A practical scoring sheet for days to flowering, pod set, pest damage, and stress symptoms — designed for small teams."
 ---
 

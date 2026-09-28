@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Write post · Himel portfolio</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <style>
+    :root {
+      --bg: #0c1a12; --surface: #12201a; --border: rgba(255,255,255,0.1);
+      --text: #f0f7f3; --muted: #8fb5a0; --accent: #34d399; --danger: #f87171;
+      --radius: 12px; --font: system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font); background: var(--bg); color: var(--text);
+      line-height: 1.5; padding: 1.25rem; min-height: 100dvh;
+    }
+    .wrap { max-width: 740px; margin: 0 auto; }
+    header { margin-bottom: 1.35rem; }
+    header h1 { font-size: 1.35rem; font-weight: 700; letter-spacing: -0.02em; }
+    header p { color: var(--muted); font-size: 0.88rem; margin-top: 0.35rem; }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1rem;
+    }
+    .card h2 {
+      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em;
+      color: var(--accent); margin-bottom: 1rem;
+    }
+    label { display: block; font-size: 0.78rem; font-weight: 600; color: var(--muted); margin-bottom: 0.3rem; }
+    input, select, textarea {
+      width: 100%; padding: 0.65rem 0.8rem; border-radius: 9px;
+      border: 1px solid var(--border); background: var(--bg); color: var(--text);
+      font: inherit; margin-bottom: 0.85rem; outline: none;
+    }
+    input:focus, select:focus, textarea:focus { border-color: rgba(52,211,153,0.5); }
+    input[type="file"] { padding: 0.5rem; font-size: 0.82rem; cursor: pointer; }
+    textarea { min-height: 150px; resize: vertical; line-height: 1.55; }
+    .row { display: grid; gap: 0.75rem; }
+    @media (min-width: 560px) {
+      .row-2 { grid-template-columns: 1fr 1fr; }
+    }
+    .check { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.85rem; font-size: 0.88rem; }
+    .check input { width: auto; margin: 0; }
+    .hint { font-size: 0.72rem; color: var(--muted); margin: -0.45rem 0 0.85rem; }
+    .templates { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.85rem; }
+    .templates button {
+      padding: 0.4rem 0.7rem; font-size: 0.75rem; font-weight: 600;
+      border-radius: 999px; border: 1px solid var(--border); background: var(--bg);
+      color: var(--muted); cursor: pointer;
+    }
+    .templates button:hover { color: var(--accent); border-color: var(--accent); }
+    .thumbs { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: -0.35rem 0 0.85rem; }
+    .thumbs img {
+      width: 64px; height: 64px; object-fit: cover; border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .actions { display: flex; flex-wrap: wrap; gap: 0.55rem; margin-top: 0.25rem; }
+    .actions button {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 0.7rem 1.05rem; border-radius: 9px; border: 1px solid var(--border);
+      background: var(--bg); color: var(--text); font: inherit; font-weight: 600;
+      font-size: 0.85rem; cursor: pointer;
+    }
+    button.primary { background: var(--accent); color: #04140c; border-color: var(--accent); }
+    button:hover { filter: brightness(1.06); }
+    .status { font-size: 0.8rem; color: var(--muted); margin-top: 0.75rem; min-height: 1.25em; }
+    .status.ok { color: var(--accent); }
+    .status.err { color: var(--danger); }
+    .preview {
+      border: 1px solid var(--border); border-radius: 9px; padding: 1rem;
+      background: var(--bg); font-size: 0.9rem; color: var(--muted);
+      max-height: 200px; overflow: auto;
+    }
+    .preview h2 { color: var(--text); font-size: 1.05rem; text-transform: none; letter-spacing: 0; margin: 0.75rem 0 0.4rem; }
+    .preview p { margin-bottom: 0.55rem; }
+    .preview ul, .preview ol { padding-left: 1.2rem; margin-bottom: 0.55rem; }
+    .steps { font-size: 0.82rem; color: var(--muted); margin-top: 0.85rem; }
+    .steps ol { padding-left: 1.2rem; margin-top: 0.4rem; }
+    .steps li { margin-bottom: 0.35rem; }
+    .steps strong { color: var(--text); }
+    code { font-size: 0.8em; background: rgba(52,211,153,0.12); padding: 0.1em 0.35em; border-radius: 4px; color: var(--accent); }
+    .badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; color: var(--accent); border: 1px solid rgba(52,211,153,0.35);
+      padding: 0.15rem 0.45rem; border-radius: 999px; margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>Write a post</h1>
+      <p>Fill the form, attach images, download a <strong>deploy-ready</strong> zip. Date is set automatically.</p>
+    </header>
+
+    <div class="card">
+      <h2>1 · Content</h2>
+      <span class="badge">Date auto-filled</span>
+      <div class="row row-2">
+        <div>
+          <label for="title">Title *</label>
+          <input id="title" type="text" placeholder="Field phenotyping notes from this week" required />
+        </div>
+        <div>
+          <label for="date">Date</label>
+          <input id="date" type="date" />
+        </div>
+      </div>
+      <div class="row row-2">
+        <div>
+          <label for="category">Category</label>
+          <select id="category">
+            <option value="field">Fieldwork</option>
+            <option value="breeding">Breeding</option>
+            <option value="methods">Methods</option>
+          </select>
+        </div>
+        <div>
+          <label for="template">Start from template</label>
+          <select id="template">
+            <option value="">— blank —</option>
+            <option value="field">Field day note</option>
+            <option value="method">Methods note</option>
+            <option value="breeding">Breeding insight</option>
+            <option value="short">Short update</option>
+          </select>
+        </div>
+      </div>
+      <label for="summary">Summary (shown on card)</label>
+      <textarea id="summary" rows="2" placeholder="One or two sentences for the blog card."></textarea>
+
+      <label>Quick templates</label>
+      <div class="templates" id="template-btns">
+        <button type="button" data-t="field">Field day</button>
+        <button type="button" data-t="method">Methods</button>
+        <button type="button" data-t="breeding">Breeding</button>
+        <button type="button" data-t="short">Short update</button>
+      </div>
+
+      <label for="body">Body *</label>
+      <textarea id="body" rows="10" placeholder="Write freely. Blank line = new paragraph.&#10;&#10;## Heading&#10;- bullet&#10;**bold**"></textarea>
+      <p class="hint">Plain text or simple Markdown (## heading, **bold**, - bullets).</p>
+      <label class="check"><input id="featured" type="checkbox" /> Make this the featured (top) post</label>
+    </div>
+
+    <div class="card">
+      <h2>2 · Images (attach files)</h2>
+      <label for="cover-file">Cover image *</label>
+      <input id="cover-file" type="file" accept="image/*" />
+      <div class="thumbs" id="cover-thumb"></div>
+      <p class="hint">Or use an image already on the site:</p>
+      <input id="cover-path" type="text" placeholder="assets/images/trial-rows.jpg (optional if you attached a file)" />
+
+      <label for="gallery-files">Extra gallery images (optional)</label>
+      <input id="gallery-files" type="file" accept="image/*" multiple />
+      <div class="thumbs" id="gallery-thumbs"></div>
+
+      <label for="video-path">Video path (optional, already on site)</label>
+      <input id="video-path" type="text" placeholder="assets/videos/intro.mp4" />
+    </div>
+
+    <div class="card">
+      <h2>3 · Preview</h2>
+      <p class="hint">Slug: <code id="slug-out">—</code></p>
+      <div class="preview" id="preview"><em style="opacity:0.55">Preview updates as you type…</em></div>
+    </div>
+
+    <div class="card">
+      <h2>4 · Deploy-ready export</h2>
+      <label for="json-file">Current <code>data/posts.json</code> (required for merge)</label>
+      <input id="json-file" type="file" accept=".json,application/json" />
+      <p class="hint">Select the posts.json from your portfolio <code>data</code> folder. Status: <strong id="json-ready">not selected</strong></p>
+      <div class="actions">
+        <button type="button" class="primary" id="btn-pack">Download deploy package (.zip)</button>
+        <button type="button" id="btn-json">Download posts.json only</button>
+        <button type="button" id="btn-md">Download .md only</button>
+      </div>
+      <p class="status" id="status"></p>
+      <div class="steps">
+        <strong>Then</strong>
+        <ol>
+          <li>Unzip into your portfolio folder (merge files).</li>
+          <li>Upload the portfolio to Cloudflare Pages (or your host).</li>
+        </ol>
+        <p style="margin-top:0.65rem">
+          Fully automatic live deploy still needs host login (GitHub/Cloudflare token).
+          This tool makes the package <em>deploy-ready</em> so you only upload.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const title = $("title");
+  const dateEl = $("date");
+  const category = $("category");
+  const summary = $("summary");
+  const body = $("body");
+  const featured = $("featured");
+  const coverFile = $("cover-file");
+  const coverPath = $("cover-path");
+  const galleryFiles = $("gallery-files");
+  const videoPath = $("video-path");
+  const preview = $("preview");
+  const slugOut = $("slug-out");
+  const status = $("status");
+  const jsonFile = $("json-file");
+  const coverThumb = $("cover-thumb");
+  const galleryThumbs = $("gallery-thumbs");
+  const templateSelect = $("template");
+
+  dateEl.value = new Date().toISOString().slice(0, 10);
+
+  const CAT_TAG = { field: "Fieldwork", breeding: "Breeding", methods: "Methods" };
+  const TEMPLATES = {
+    field: {
+      summary: "Notes from a field day: what we scored, what stood out, and what to follow up.",
+      body: "## What we did\n\nDescribe the plots, location, and scoring focus for the day.\n\n## Observations\n\n- Key visual differences between lines\n- Stress or pest notes\n- Weather / management context\n\n## Next steps\n\nWhat to measure or check next visit.",
+    },
+    method: {
+      summary: "A short methods note so the workflow is repeatable for the team.",
+      body: "## Goal\n\nWhat this protocol is for.\n\n## Steps\n\n1. Step one\n2. Step two\n3. Step three\n\n## Tips\n\nCommon mistakes and how to avoid them.",
+    },
+    breeding: {
+      summary: "A breeding insight from recent data or selection decisions.",
+      body: "## Context\n\nWhich crop, trial, or trait set.\n\n## What the data suggest\n\nMain pattern (e.g. trait associations, stability).\n\n## Decision\n\nHow this affects selection or crossing plans.",
+    },
+    short: {
+      summary: "Quick update from the field or lab.",
+      body: "Short paragraph on what changed this week and why it matters.\n\nOptional second paragraph with a concrete next action.",
+    },
+  };
+
+  function applyTemplate(key) {
+    const t = TEMPLATES[key];
+    if (!t) return;
+    if (!summary.value.trim()) summary.value = t.summary;
+    if (!body.value.trim() || confirm("Replace current body with the template?")) body.value = t.body;
+    if (key === "method") category.value = "methods";
+    else if (key === "breeding") category.value = "breeding";
+    else category.value = "field";
+    refresh();
+  }
+
+  templateSelect.addEventListener("change", () => {
+    if (templateSelect.value) applyTemplate(templateSelect.value);
+    templateSelect.value = "";
+  });
+  $("template-btns").addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-t]");
+    if (btn) applyTemplate(btn.getAttribute("data-t"));
+  });
+
+  function slugify(s) {
+    return String(s || "").toLowerCase().normalize("NFKD")
+      .replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "").slice(0, 50) || "post";
+  }
+  function postId() {
+    return (dateEl.value || "undated").trim() + "-" + slugify(title.value);
+  }
+  function safeImageName(file, prefix) {
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase().replace(/[^a-z0-9]/g, "") || "jpg";
+    const base = slugify(file.name.replace(/\.[^.]+$/, "")).slice(0, 28) || prefix;
+    return prefix + "-" + base + "." + ext;
+  }
+
+  function mdToHtml(src) {
+    const text = String(src || "").replace(/\r\n/g, "\n").trim();
+    if (!text) return "";
+    return text.split(/\n{2,}/).map((block) => {
+      const b = block.trim();
+      if (!b) return "";
+      if (/^###\s+/.test(b)) return "<h3>" + inline(b.replace(/^###\s+/, "")) + "</h3>";
+      if (/^##\s+/.test(b)) return "<h2>" + inline(b.replace(/^##\s+/, "")) + "</h2>";
+      if (/^#\s+/.test(b)) return "<h2>" + inline(b.replace(/^#\s+/, "")) + "</h2>";
+      const lines = b.split("\n");
+      if (lines.every((l) => !l.trim() || /^[-*]\s+/.test(l.trim()) || /^\d+\.\s+/.test(l.trim()))) {
+        const ordered = lines.some((l) => /^\d+\.\s+/.test(l.trim()));
+        const items = lines.filter((l) => l.trim())
+          .map((l) => "<li>" + inline(l.replace(/^([-*]|\d+\.)\s+/, "")) + "</li>").join("");
+        return (ordered ? "<ol>\n" : "<ul>\n") + items + (ordered ? "\n</ol>" : "\n</ul>");
+      }
+      return "<p>" + inline(lines.join(" ")) + "</p>";
+    }).join("\n");
+  }
+  function inline(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>")
+      .replace(/`(.+?)`/g, "<code>$1</code>");
+  }
+  function minutes(text) {
+    const n = String(text || "").trim().split(/\s+/).filter(Boolean).length;
+    return Math.max(1, Math.round(n / 200));
+  }
+
+  function showThumbs(input, container) {
+    container.innerHTML = "";
+    Array.from(input.files || []).forEach((f) => {
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(f);
+      img.alt = f.name;
+      container.appendChild(img);
+    });
+  }
+  coverFile.addEventListener("change", () => showThumbs(coverFile, coverThumb));
+  galleryFiles.addEventListener("change", () => showThumbs(galleryFiles, galleryThumbs));
+
+  function resolveAssets() {
+    const id = postId();
+    const coverF = coverFile.files && coverFile.files[0];
+    const galleryList = galleryFiles.files ? Array.from(galleryFiles.files) : [];
+    let cover = coverPath.value.trim();
+    const imageFiles = [];
+    if (coverF) {
+      const name = safeImageName(coverF, id.slice(0, 18) + "-cover");
+      cover = "assets/images/" + name;
+      imageFiles.push({ path: cover, file: coverF });
+    }
+    const galleryPaths = [];
+    galleryList.forEach((f, i) => {
+      const name = safeImageName(f, id.slice(0, 14) + "-g" + (i + 1));
+      const path = "assets/images/" + name;
+      galleryPaths.push(path);
+      imageFiles.push({ path, file: f });
+    });
+    return {
+      cover: cover || "",
+      gallery: galleryPaths.length ? galleryPaths : null,
+      video: videoPath.value.trim() || null,
+      imageFiles,
+    };
+  }
+
+  function buildPost() {
+    const assets = resolveAssets();
+    const cat = category.value || "field";
+    return {
+      id: postId(),
+      featured: !!featured.checked,
+      category: cat,
+      tag: CAT_TAG[cat] || "Post",
+      date: dateEl.value,
+      minutes: minutes(body.value),
+      title: title.value.trim(),
+      summary: summary.value.trim(),
+      cover: assets.cover,
+      video: assets.video,
+      gallery: assets.gallery,
+      body: mdToHtml(body.value),
+      _imageFiles: assets.imageFiles,
+    };
+  }
+
+  function buildMarkdown(p) {
+    const lines = ["---"];
+    lines.push('title: "' + p.title.replace(/"/g, '\\"') + '"');
+    lines.push('date: "' + p.date + '"');
+    lines.push('category: "' + p.category + '"');
+    lines.push('tag: "' + p.tag + '"');
+    if (p.cover) lines.push('cover: "' + p.cover + '"');
+    if (p.video) lines.push('video: "' + p.video + '"');
+    if (p.gallery && p.gallery.length) {
+      lines.push("gallery:");
+      p.gallery.forEach((g) => lines.push('  - "' + g + '"'));
+    }
+    if (p.summary) lines.push('summary: "' + p.summary.replace(/"/g, '\\"') + '"');
+    if (p.featured) lines.push("featured: true");
+    lines.push("---", "", body.value.trim(), "");
+    return lines.join("\n");
+  }
+
+  let loadedPosts = null; // array from file or fetch
+
+  function validate() {
+    if (!title.value.trim()) return "Title is required.";
+    if (!dateEl.value) return "Date is required.";
+    if (!body.value.trim()) return "Body is required.";
+    if (!resolveAssets().cover) return "Attach a cover image OR type an existing path like assets/images/trial-rows.jpg";
+    if (!/^[a-z0-9-]+$/.test(postId())) return "Invalid slug — simplify the title (letters/numbers only).";
+    return null;
+  }
+
+  function refresh() {
+    slugOut.textContent = title.value.trim() ? postId() : "—";
+    preview.innerHTML = mdToHtml(body.value) || '<em style="opacity:0.55">Preview updates as you type…</em>';
+  }
+  [title, dateEl, category, summary, body, featured, coverPath, videoPath].forEach((el) => {
+    el.addEventListener("input", refresh);
+    el.addEventListener("change", refresh);
+  });
+  refresh();
+
+  function setStatus(msg, type) {
+    status.textContent = msg || "";
+    status.className = "status" + (type ? " " + type : "");
+    status.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  }
+
+  function downloadBlob(filename, blob) {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.rel = "noopener";
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  }
+
+  function setJsonReady(ok, label) {
+    const el = document.getElementById("json-ready");
+    if (!el) return;
+    el.textContent = label || (ok ? "loaded" : "not selected");
+    el.style.color = ok ? "var(--accent)" : "var(--danger)";
+  }
+
+  jsonFile.addEventListener("change", async () => {
+    const file = jsonFile.files && jsonFile.files[0];
+    if (!file) {
+      loadedPosts = null;
+      setJsonReady(false);
+      return;
+    }
+    try {
+      const list = JSON.parse(await file.text());
+      if (!Array.isArray(list)) throw new Error("File must be a JSON array");
+      loadedPosts = list;
+      setJsonReady(true, "loaded (" + list.length + " posts)");
+      setStatus("posts.json loaded (" + list.length + " existing posts). Fill the form, then download.", "ok");
+    } catch (e) {
+      loadedPosts = null;
+      setJsonReady(false, "invalid file");
+      setStatus("Could not read posts.json: " + (e.message || e), "err");
+    }
+  });
+
+  // Try auto-load when page is served from the portfolio (http://localhost/...)
+  fetch("../data/posts.json", { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : Promise.reject()))
+    .then((list) => {
+      if (Array.isArray(list)) {
+        loadedPosts = list;
+        setJsonReady(true, "auto-loaded (" + list.length + " posts)");
+        setStatus("Found data/posts.json automatically (" + list.length + " posts).", "ok");
+      }
+    })
+    .catch(() => {});
+
+  function mergeList(existingList) {
+    const post = buildPost();
+    const imageFiles = post._imageFiles || [];
+    delete post._imageFiles;
+    let list = Array.isArray(existingList) ? existingList.slice() : [];
+    if (post.featured) list = list.map((p) => Object.assign({}, p, { featured: false }));
+    list = list.filter((p) => p.id !== post.id);
+    list.unshift(post);
+    list.sort((a, b) => String(b.date || "").localeCompare(String(a.date || "")));
+    return { post, list, imageFiles };
+  }
+
+  async function ensureJSZip() {
+    if (typeof JSZip !== "undefined") return true;
+    // try load again
+    await new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = "https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js";
+      s.onload = resolve;
+      s.onerror = reject;
+      document.head.appendChild(s);
+    }).catch(() => null);
+    return typeof JSZip !== "undefined";
+  }
+
+  async function doPack() {
+    const err = validate();
+    if (err) return setStatus(err, "err");
+    if (!loadedPosts) {
+      return setStatus("First select your current data/posts.json above (or open this page via local server so it auto-loads).", "err");
+    }
+    setStatus("Building package…");
+    try {
+      const { post, list, imageFiles } = mergeList(loadedPosts);
+      const hasZip = await ensureJSZip();
+      if (!hasZip) {
+        downloadBlob("posts.json", new Blob([JSON.stringify(list, null, 2)], { type: "application/json;charset=utf-8" }));
+        setStatus("Zip library could not load (need internet once). Downloaded posts.json only — put new images into assets/images/ manually.", "err");
+        return;
+      }
+      const zip = new JSZip();
+      zip.file("data/posts.json", JSON.stringify(list, null, 2));
+      zip.file("posts/" + post.id + ".md", buildMarkdown(post));
+      for (const { path, file } of imageFiles) {
+        const buf = await file.arrayBuffer();
+        zip.file(path, buf);
+      }
+      const blob = await zip.generateAsync({ type: "blob" });
+      downloadBlob("post-deploy-" + post.id + ".zip", blob);
+      setStatus(
+        "Downloaded zip. Unzip into portfolio folder. Contains posts.json" +
+          (imageFiles.length ? ", " + imageFiles.length + " image(s)" : "") +
+          ", and .md backup.",
+        "ok"
+      );
+    } catch (e) {
+      setStatus("Download failed: " + (e.message || e), "err");
+      console.error(e);
+    }
+  }
+
+  $("btn-pack").addEventListener("click", () => { doPack(); });
+
+  $("btn-json").addEventListener("click", () => {
+    const err = validate();
+    if (err) return setStatus(err, "err");
+    if (!loadedPosts) return setStatus("Select data/posts.json first.", "err");
+    try {
+      const { list } = mergeList(loadedPosts);
+      downloadBlob("posts.json", new Blob([JSON.stringify(list, null, 2)], { type: "application/json;charset=utf-8" }));
+      setStatus("Downloaded posts.json. Replace data/posts.json on the site. Add new images to assets/images/ if any.", "ok");
+    } catch (e) {
+      setStatus("Failed: " + (e.message || e), "err");
+    }
+  });
+
+  $("btn-md").addEventListener("click", () => {
+    const err = validate();
+    if (err) return setStatus(err, "err");
+    const post = buildPost();
+    delete post._imageFiles;
+    downloadBlob(post.id + ".md", new Blob([buildMarkdown(post)], { type: "text/markdown;charset=utf-8" }));
+    setStatus("Downloaded Markdown backup.", "ok");
+  });
+})();
+  </script>
+</body>
+</html>
